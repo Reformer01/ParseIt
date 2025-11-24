@@ -29,15 +29,18 @@
             color: #f8fafc; 
         }
         .glass-panel { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
-        .sidebar-link.active { background: rgba(99, 102, 241, 0.1); border-left: 3px solid #6366f1; color: white; }
+        .glass-light { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.08); }
+        .glass-heavy { background: rgba(30, 41, 59, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.03); }
+        .sidebar-link.active { background: rgba(99, 102, 241, 0.15); backdrop-filter: blur(8px); border-left: 3px solid #6366f1; color: white; }
         .sidebar-link { border-left: 3px solid transparent; }
+        .sidebar-link:hover { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(6px); }
         /* Printable Report Styles */
         @media print { .no-print { display: none; } body { background: white; color: black; } }
     </style>
 </head>
 <body class="h-screen flex overflow-hidden">
 
-    <aside class="w-64 bg-slate-900 border-r border-white/5 flex flex-col no-print z-20">
+    <aside class="w-64 glass-heavy border-r border-white/5 flex flex-col no-print z-20">
         <div class="p-6 flex items-center gap-3">
             <div class="w-8 h-8 bg-brand-500 rounded-lg flex items-center justify-center text-white font-bold"><i class="fa-solid fa-cube"></i></div>
             <span class="font-bold text-lg tracking-tight">ResuMatch <span class="text-brand-500">Pro</span></span>
@@ -69,10 +72,10 @@
 
     <main class="flex-1 flex flex-col h-full overflow-hidden relative">
         
-        <header class="h-16 border-b border-white/5 flex items-center justify-between px-8 bg-slate-900/50 backdrop-blur-md z-10">
+        <header class="h-16 border-b border-white/5 flex items-center justify-between px-8 glass-heavy backdrop-blur-md z-10">
             <h2 id="pageTitle" class="text-lg font-semibold text-white">Candidate Optimizer</h2>
             <div class="flex gap-3">
-                <button onclick="downloadReport()" class="hidden md:flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-xs font-bold transition border border-white/10">
+                <button onclick="downloadReport()" class="hidden md:flex items-center gap-2 px-4 py-2 glass-light hover:glass-panel rounded-lg text-xs font-bold transition border border-white/10">
                     <i class="fa-solid fa-file-pdf"></i> Export Report
                 </button>
             </div>
@@ -82,7 +85,7 @@
 
             <div class="max-w-6xl mx-auto mb-8">
                 <div class="glass-panel rounded-xl p-1">
-                    <div class="bg-slate-900/80 rounded-lg p-4">
+                    <div class="glass-light rounded-xl p-5">
                         <div class="flex justify-between items-center mb-2">
                             <label class="text-xs font-bold text-brand-500 uppercase tracking-wider">Target Role (Baseline)</label>
                             <span class="text-xs text-slate-500">Paste JD to calibrate the AI</span>
@@ -117,11 +120,11 @@
                             </div>
                         </div>
                         <div class="grid grid-cols-2 gap-2 text-xs">
-                            <div class="bg-slate-800 p-2 rounded">
+                            <div class="glass-light p-2 rounded">
                                 <span class="block text-slate-500">Hard Skills</span>
                                 <span class="font-bold text-white" id="cntHard">0</span>
                             </div>
-                            <div class="bg-slate-800 p-2 rounded">
+                            <div class="glass-light p-2 rounded">
                                 <span class="block text-slate-500">Soft Skills</span>
                                 <span class="font-bold text-white" id="cntSoft">0</span>
                             </div>
@@ -138,7 +141,7 @@
                     <div class="glass-panel rounded-xl p-6 border-l-4 border-amber-500">
                         <div class="flex justify-between mb-3">
                             <h3 class="font-bold text-white">Impact Analysis</h3>
-                            <span class="text-xs bg-slate-800 px-2 py-1 rounded text-amber-400" id="verbScore">Weak Impact</span>
+                            <span class="text-xs glass-light px-2 py-1 rounded text-amber-400" id="verbScore">Weak Impact</span>
                         </div>
                         <p class="text-xs text-slate-400 mb-2">Recruiters look for "Power Verbs" (e.g., Led, Engineered, Optimized).</p>
                         <div id="verbList" class="flex flex-wrap gap-2"></div>
@@ -160,13 +163,13 @@
                 </div>
 
                 <div class="glass-panel rounded-xl overflow-hidden hidden" id="batchResults">
-                    <div class="p-4 bg-slate-800/50 border-b border-white/5 flex justify-between items-center">
+                    <div class="p-4 glass-light border-b border-white/5 flex justify-between items-center">
                         <h3 class="font-bold">Leaderboard</h3>
                         <span class="text-xs bg-brand-500 px-2 py-1 rounded text-white" id="candidateCount">0 Candidates</span>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm text-left">
-                            <thead class="text-xs text-slate-500 uppercase bg-slate-900">
+                            <thead class="text-xs text-slate-500 uppercase glass-light">
                                 <tr>
                                     <th class="px-6 py-3">Rank</th>
                                     <th class="px-6 py-3">Candidate (File)</th>
@@ -190,7 +193,7 @@
                         <div>
                             <label class="text-xs font-bold text-slate-500">Ignored Terms (AI Training)</label>
                             <div class="flex gap-2 mt-2">
-                                <button onclick="resetMemory()" class="px-4 py-2 bg-red-500/10 text-red-400 border border-red-500/20 rounded-lg text-xs hover:bg-red-500/20">Clear All Learned Terms</button>
+                                <button onclick="resetMemory()" class="px-4 py-2 glass-light text-red-400 border border-red-500/20 rounded-lg text-xs hover:bg-red-500/20">Clear All Learned Terms</button>
                             </div>
                         </div>
                     </div>
