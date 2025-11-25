@@ -30,12 +30,25 @@
     </script>
     <style>
         body { 
-            background: #2C2E39 url('backgroundImg.jpg') center center/cover no-repeat fixed; 
+            background: #2C2E39 url('backgroundImg.jpg') center/cover no-repeat fixed; 
             color: #FFFDF2; 
+            min-height: 100vh;
         }
+        
+        /* Responsive Background */
+        @media (max-width: 768px) {
+            body {
+                background: #2C2E39 url('backgroundImg.jpg') center/cover no-repeat scroll;
+                background-attachment: scroll;
+            }
+        }
+        
+        /* Glass Panels */
         .glass-panel { background: rgba(44, 46, 57, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 253, 242, 0.1); }
         .glass-light { background: rgba(44, 46, 57, 0.4); backdrop-filter: blur(10px); border: 1px solid rgba(255, 253, 242, 0.08); }
         .glass-heavy { background: rgba(44, 46, 57, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 253, 242, 0.05); }
+        
+        /* Sidebar */
         .sidebar-link.active { background: rgba(122, 32, 72, 0.2); backdrop-filter: blur(8px); border-left: 3px solid #7A2048; color: #FFFDF2; }
         .sidebar-link { border-left: 3px solid transparent; color: #E8E1CC; }
         .sidebar-link:hover { color: #FFFDF2; background: rgba(255, 253, 242, 0.05); backdrop-filter: blur(6px); }
@@ -50,7 +63,59 @@
         ::-webkit-scrollbar-track { background: #1F2129; }
         ::-webkit-scrollbar-thumb { background: #7A2048; border-radius: 3px; }
         
-        @media print { .no-print { display: none !important; } body { background: #FFFDF2; color: #2C2E39; } }
+        /* Mobile Responsive */
+        @media (max-width: 640px) {
+            .stats-grid-mobile {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+            }
+            
+            .details-grid-mobile {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+            }
+            
+            .studio-split-mobile {
+                flex-direction: column !important;
+            }
+            
+            .studio-split-mobile > div {
+                width: 100% !important;
+                height: 50vh !important;
+            }
+            
+            .mobile-p-4 {
+                padding: 1rem !important;
+            }
+            
+            .mobile-text-sm {
+                font-size: 0.875rem !important;
+            }
+            
+            .mobile-text-xs {
+                font-size: 0.75rem !important;
+            }
+            
+            .mobile-hidden {
+                display: none !important;
+            }
+        }
+        
+        @media (max-width: 768px) and (min-width: 641px) {
+            .stats-grid-tablet {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+            
+            .details-grid-tablet {
+                grid-template-columns: 1fr !important;
+            }
+        }
+        
+        /* Print Styles */
+        @media print { 
+            .no-print { display: none !important; } 
+            body { background: #FFFDF2; color: #2C2E39; } 
+        }
     </style>
 </head>
 <body class="h-screen flex overflow-hidden font-sans">
@@ -91,162 +156,164 @@
 
     <main class="flex-1 flex flex-col h-full relative">
         
-        <header class="h-16 border-b border-white/5 glass-heavy backdrop-blur-md flex items-center justify-between px-6 z-10 no-print">
-            <div class="flex items-center gap-4">
-                <h2 id="pageTitle" class="text-lg font-semibold text-neutral-50">Analysis Dashboard</h2>
-                <div id="fileBadge" class="hidden px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-mono">
-                    <i class="fa-solid fa-file-pdf mr-1"></i> <span id="fileNameDisplay">resume.pdf</span>
+        <header class="h-14 lg:h-16 border-b border-white/5 glass-heavy backdrop-blur-md flex items-center justify-between px-3 lg:px-6 z-10 no-print">
+            <div class="flex items-center gap-2 lg:gap-4">
+                <h2 id="pageTitle" class="text-base lg:text-lg font-semibold text-neutral-50">Analysis Dashboard</h2>
+                <div id="fileBadge" class="hidden px-2 lg:px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-mono">
+                    <i class="fa-solid fa-file-pdf mr-1 text-xs"></i> <span id="fileNameDisplay" class="text-xs">resume.pdf</span>
                 </div>
             </div>
-            <div class="flex gap-3">
-                <button onclick="document.getElementById('pdfUpload').click()" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-neutral-50 text-xs font-bold rounded-lg transition flex items-center gap-2">
-                    <i class="fa-solid fa-upload"></i> Upload Resume
+            <div class="flex gap-2 lg:gap-3">
+                <button onclick="document.getElementById('pdfUpload').click()" class="px-3 lg:px-4 py-2 bg-brand-500 hover:bg-brand-600 text-neutral-50 text-xs font-bold rounded-lg transition flex items-center gap-1 lg:gap-2">
+                    <i class="fa-solid fa-upload text-xs lg:text-sm"></i> <span class="hidden lg:inline">Upload Resume</span><span class="lg:hidden">Upload</span>
                 </button>
                 <input type="file" id="pdfUpload" class="hidden" accept=".pdf" onchange="handleFileUpload(this)">
             </div>
         </header>
 
-        <div id="view-dashboard" class="flex-1 overflow-y-auto p-6 lg:p-10 space-y-8 fade-in">
+        <div id="view-dashboard" class="flex-1 overflow-y-auto p-4 lg:p-10 space-y-6 lg:space-y-8 fade-in">
             
-            <div class="glass-panel rounded-2xl p-1 relative group">
-                <div class="absolute -inset-0.5 bg-gradient-to-r from-brand-600 to-purple-600 rounded-2xl opacity-20 group-hover:opacity-40 transition duration-500 blur"></div>
-                <div class="relative glass-panel rounded-xl p-6">
-                    <div class="flex justify-between items-center mb-4">
-                        <label class="text-sm font-bold text-neutral-200 flex items-center gap-2">
+            <div class="glass-panel rounded-xl lg:rounded-2xl p-1 relative group">
+                <div class="absolute -inset-0.5 bg-gradient-to-r from-brand-600 to-purple-600 rounded-xl lg:rounded-2xl opacity-20 group-hover:opacity-40 transition duration-500 blur"></div>
+                <div class="relative glass-panel rounded-xl lg:rounded-xl p-4 lg:p-6">
+                    <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-4">
+                        <label class="text-sm font-bold text-neutral-200 flex items-center gap-2 mb-2 lg:mb-0">
                             <i class="fa-solid fa-briefcase text-brand-400"></i> Target Job Description
                         </label>
-                        <span class="text-xs text-slate-500">Paste JD to calibrate AI</span>
+                        <span class="text-xs text-neutral-500">Paste JD to calibrate AI</span>
                     </div>
-                    <textarea id="jdInput" class="w-full h-32 bg-transparent border border-neutral-200/20 rounded-lg p-4 text-sm text-neutral-200 focus:outline-none focus:border-brand-500 transition-colors resize-none" placeholder="Paste the full job description here..."></textarea>
+                    <textarea id="jdInput" class="w-full h-24 lg:h-32 bg-transparent border border-neutral-200/20 rounded-lg p-3 lg:p-4 text-sm text-neutral-200 focus:outline-none focus:border-brand-500 transition-colors resize-none" placeholder="Paste the full job description here..."></textarea>
                     <div class="mt-4 flex justify-end">
-                        <button onclick="runAnalysis()" class="px-6 py-2 bg-neutral-50 text-dark-900 font-bold text-sm rounded-lg hover:bg-neutral-100 transition">
+                        <button onclick="runAnalysis()" class="px-4 lg:px-6 py-2 bg-neutral-50 text-dark-900 font-bold text-sm rounded-lg hover:bg-neutral-100 transition">
                             Run Analysis
                         </button>
                     </div>
                 </div>
             </div>
 
-            <div id="statsGrid" class="hidden grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between relative overflow-hidden">
-                    <div class="absolute right-0 top-0 w-24 h-24 bg-brand-500/10 rounded-full blur-2xl -mr-10 -mt-10"></div>
-                    <span class="text-neutral-400 text-xs font-bold uppercase tracking-wider">Overall Match</span>
+            <div id="statsGrid" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 stats-grid-mobile stats-grid-tablet">
+                <div class="glass-panel p-4 lg:p-6 rounded-xl lg:rounded-2xl flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-16 lg:w-24 h-16 lg:h-24 bg-brand-500/10 rounded-full blur-2xl -mr-8 lg:-mr-10 -mt-8 lg:-mt-10"></div>
+                    <span class="text-neutral-400 text-xs font-bold uppercase tracking-wider mobile-text-xs">Overall Match</span>
                     <div class="flex items-end gap-2 mt-2">
-                        <span id="scoreVal" class="text-4xl font-bold text-neutral-50">0%</span>
-                        <span id="scoreText" class="text-xs text-emerald-400 mb-1">Excellent</span>
+                        <span id="scoreVal" class="text-2xl lg:text-4xl font-bold text-neutral-50">0%</span>
+                        <span id="scoreText" class="text-xs text-emerald-400 mb-1 mobile-text-xs">Excellent</span>
                     </div>
                     <div class="w-full bg-slate-800 h-1 mt-4 rounded-full overflow-hidden">
                         <div id="scoreBar" class="h-full bg-brand-500 rounded-full" style="width: 0%"></div>
                     </div>
                 </div>
                 
-                <div class="glass-panel p-6 rounded-2xl">
-                    <span class="text-neutral-400 text-xs font-bold uppercase tracking-wider">Hard Skills</span>
+                <div class="glass-panel p-4 lg:p-6 rounded-xl lg:rounded-2xl">
+                    <span class="text-neutral-400 text-xs font-bold uppercase tracking-wider mobile-text-xs">Hard Skills</span>
                     <div class="mt-2 flex items-center gap-3">
-                        <i class="fa-solid fa-microchip text-2xl text-purple-400"></i>
+                        <i class="fa-solid fa-microchip text-xl lg:text-2xl text-purple-400"></i>
                         <div>
-                            <span id="hardCount" class="text-2xl font-bold text-neutral-50">0</span>
-                            <span class="text-xs text-neutral-500 block">Matches Found</span>
+                            <span id="hardCount" class="text-xl lg:text-2xl font-bold text-neutral-50">0</span>
+                            <span class="text-xs text-neutral-500 block mobile-text-xs">Matches Found</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="glass-panel p-6 rounded-2xl">
-                    <span class="text-neutral-400 text-xs font-bold uppercase tracking-wider">Soft Skills</span>
+                <div class="glass-panel p-4 lg:p-6 rounded-xl lg:rounded-2xl">
+                    <span class="text-neutral-400 text-xs font-bold uppercase tracking-wider mobile-text-xs">Soft Skills</span>
                     <div class="mt-2 flex items-center gap-3">
-                        <i class="fa-solid fa-comments text-2xl text-pink-400"></i>
+                        <i class="fa-solid fa-comments text-xl lg:text-2xl text-pink-400"></i>
                         <div>
-                            <span id="softCount" class="text-2xl font-bold text-neutral-50">0</span>
-                            <span class="text-xs text-neutral-500 block">Traits Detected</span>
+                            <span id="softCount" class="text-xl lg:text-2xl font-bold text-neutral-50">0</span>
+                            <span class="text-xs text-neutral-500 block mobile-text-xs">Traits Detected</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="glass-panel p-6 rounded-2xl">
-                    <span class="text-neutral-400 text-xs font-bold uppercase tracking-wider">Impact Score</span>
+                <div class="glass-panel p-4 lg:p-6 rounded-xl lg:rounded-2xl">
+                    <span class="text-neutral-400 text-xs font-bold uppercase tracking-wider mobile-text-xs">Impact Score</span>
                     <div class="mt-2 flex items-center gap-3">
-                        <i class="fa-solid fa-fire text-2xl text-amber-400"></i>
+                        <i class="fa-solid fa-fire text-xl lg:text-2xl text-amber-400"></i>
                         <div>
-                            <span id="verbCount" class="text-2xl font-bold text-neutral-50">0</span>
-                            <span class="text-xs text-neutral-500 block">Power Verbs</span>
+                            <span id="verbCount" class="text-xl lg:text-2xl font-bold text-neutral-50">0</span>
+                            <span class="text-xs text-neutral-500 block mobile-text-xs">Power Verbs</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div id="detailsGrid" class="hidden grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div class="glass-panel rounded-2xl p-6 border-t-4 border-red-500/50">
-                    <h3 class="text-lg font-bold text-neutral-50 mb-4">Critical Gaps</h3>
+            <div id="detailsGrid" class="hidden grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 details-grid-mobile details-grid-tablet">
+                <div class="glass-panel rounded-xl lg:rounded-2xl p-4 lg:p-6 border-t-4 border-red-500/50">
+                    <h3 class="text-base lg:text-lg font-bold text-neutral-50 mb-4 mobile-text-sm">Critical Gaps</h3>
                     <div id="missingKeywords" class="flex flex-wrap gap-2"></div>
                 </div>
                 
-                <div class="glass-panel rounded-2xl p-6 border-t-4 border-brand-500/50">
-                    <h3 class="text-lg font-bold text-neutral-50 mb-4">AI Recommendations</h3>
-                    <ul id="aiSuggestions" class="space-y-3 text-sm text-neutral-300"></ul>
+                <div class="glass-panel rounded-xl lg:rounded-2xl p-4 lg:p-6 border-t-4 border-brand-500/50">
+                    <h3 class="text-base lg:text-lg font-bold text-neutral-50 mb-4 mobile-text-sm">AI Recommendations</h3>
+                    <ul id="aiSuggestions" class="space-y-3 text-sm text-neutral-300 mobile-text-xs"></ul>
                 </div>
             </div>
         </div>
 
         <div id="view-studio" class="hidden flex-1 flex flex-col h-full">
             
-            <div class="h-12 border-b border-white/5 glass-panel flex items-center justify-between px-4">
-                <div class="flex items-center gap-2">
-                    <span class="text-xs font-bold text-slate-500 uppercase mr-2">Tools:</span>
-                    <button onclick="fixWeakVerbs()" class="px-3 py-1.5 rounded bg-amber-500/10 text-amber-400 text-xs hover:bg-amber-500/20 transition flex items-center gap-2">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i> Fix Weak Verbs
+            <div class="h-12 lg:h-16 border-b border-white/5 glass-panel flex flex-col lg:flex-row items-center justify-between px-4 lg:px-4">
+                <div class="flex items-center gap-2 mb-2 lg:mb-0">
+                    <span class="text-xs font-bold text-neutral-500 uppercase mr-2">Tools:</span>
+                    <button onclick="fixWeakVerbs()" class="px-2 lg:px-3 py-1 lg:py-1.5 rounded bg-amber-500/10 text-amber-400 text-xs hover:bg-amber-500/20 transition flex items-center gap-1 lg:gap-2">
+                        <i class="fa-solid fa-wand-magic-sparkles text-xs lg:text-sm"></i> <span class="hidden lg:inline">Fix Weak Verbs</span><span class="lg:hidden">Fix</span>
                     </button>
-                    <button onclick="generateSummary()" class="px-3 py-1.5 rounded bg-purple-500/10 text-purple-400 text-xs hover:bg-purple-500/20 transition flex items-center gap-2">
-                        <i class="fa-solid fa-align-left"></i> Write Summary
+                    <button onclick="generateSummary()" class="px-2 lg:px-3 py-1 lg:py-1.5 rounded bg-purple-500/10 text-purple-400 text-xs hover:bg-purple-500/20 transition flex items-center gap-1 lg:gap-2">
+                        <i class="fa-solid fa-align-left text-xs lg:text-sm"></i> <span class="hidden lg:inline">Write Summary</span><span class="lg:hidden">Summary</span>
                     </button>
-                    <button onclick="exportATS()" class="px-3 py-1.5 rounded bg-emerald-500/10 text-emerald-400 text-xs hover:bg-emerald-500/20 transition flex items-center gap-2">
-                        <i class="fa-solid fa-download"></i> Export ATS PDF
+                    <button onclick="exportATS()" class="px-2 lg:px-3 py-1 lg:py-1.5 rounded bg-emerald-500/10 text-emerald-400 text-xs hover:bg-emerald-500/20 transition flex items-center gap-1 lg:gap-2">
+                        <i class="fa-solid fa-download text-xs lg:text-sm"></i> <span class="hidden lg:inline">Export ATS PDF</span><span class="lg:hidden">Export</span>
                     </button>
                 </div>
-                <div class="text-xs text-slate-500" id="liveWordCount">0 Words</div>
+                <div class="text-xs text-neutral-500" id="liveWordCount">0 Words</div>
             </div>
 
-            <div class="flex-1 flex overflow-hidden">
-                <div class="w-1/2 bg-slate-900 border-r border-white/5 flex flex-col relative group">
+            <div class="flex-1 flex overflow-hidden studio-split-mobile">
+                <div class="w-1/2 lg:w-1/2 bg-slate-900 border-r border-white/5 flex flex-col relative group">
                     <div class="absolute top-2 left-2 z-10 glass-light px-2 py-1 rounded text-[10px] text-white backdrop-blur">Original PDF</div>
-                    <div class="flex-1 overflow-auto p-4 flex justify-center" id="pdfContainer">
-                        <canvas id="pdfCanvas" class="shadow-2xl"></canvas>
+                    <div class="flex-1 overflow-auto p-2 lg:p-4 flex justify-center" id="pdfContainer">
+                        <canvas id="pdfCanvas" class="shadow-2xl max-w-full h-auto"></canvas>
                     </div>
                 </div>
 
-                <div class="w-1/2 flex flex-col">
-                    <div class="h-10 glass-panel border-b border-white/5 flex items-center px-4 overflow-x-auto gap-2 no-scrollbar" id="quickInsertBar">
-                        <span class="text-[10px] text-slate-500 uppercase whitespace-nowrap">Quick Inject:</span>
+                <div class="w-1/2 lg:w-1/2 flex flex-col">
+                    <div class="h-10 lg:h-10 glass-panel border-b border-white/5 flex items-center px-2 lg:px-4 overflow-x-auto gap-1 lg:gap-2 no-scrollbar" id="quickInsertBar">
+                        <span class="text-[10px] text-neutral-500 uppercase whitespace-nowrap">Quick:</span>
                         </div>
                     
-                    <textarea id="resumeEditor" class="flex-1 w-full bg-transparent text-neutral-200 p-6 text-sm editor-area focus:bg-neutral-900/50 transition-colors" spellcheck="false" placeholder="Your resume text will appear here for editing..."></textarea>
+                    <textarea id="resumeEditor" class="flex-1 w-full bg-transparent text-neutral-200 p-3 lg:p-6 text-xs lg:text-sm editor-area focus:bg-neutral-900/50 transition-colors" spellcheck="false" placeholder="Your resume text will appear here for editing..."></textarea>
                 </div>
             </div>
         </div>
 
-        <div id="view-recruiter" class="hidden flex-1 overflow-y-auto p-6 lg:p-10">
-            <div class="glass-panel rounded-2xl p-8 border-dashed border-2 border-slate-700 hover:border-brand-500 cursor-pointer transition text-center" onclick="document.getElementById('batchUpload').click()">
-                <div class="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fa-solid fa-layer-group text-2xl text-brand-400"></i>
+        <div id="view-recruiter" class="hidden flex-1 overflow-y-auto p-4 lg:p-6 lg:p-10">
+            <div class="glass-panel rounded-xl lg:rounded-2xl p-6 lg:p-8 border-dashed border-2 border-slate-700 hover:border-brand-500 cursor-pointer transition text-center" onclick="document.getElementById('batchUpload').click()">
+                <div class="w-12 lg:w-16 h-12 lg:h-16 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fa-solid fa-layer-group text-xl lg:text-2xl text-brand-400"></i>
                 </div>
-                <h3 class="text-2xl font-bold text-neutral-50">Batch Ranking System</h3>
-                <p class="text-neutral-400 mt-2">Upload multiple PDFs to rank them against the Job Description.</p>
+                <h3 class="text-xl lg:text-2xl font-bold text-neutral-50 mb-2">Batch Ranking System</h3>
+                <p class="text-neutral-400 text-sm lg:text-base mt-2">Upload multiple PDFs to rank them against the Job Description.</p>
                 <input type="file" id="batchUpload" multiple accept=".pdf" class="hidden" onchange="handleBatchUpload(this)">
             </div>
 
-            <div id="batchResults" class="hidden mt-8">
-                <h3 class="text-lg font-bold text-neutral-50 mb-4">Leaderboard</h3>
+            <div id="batchResults" class="hidden mt-6 lg:mt-8">
+                <h3 class="text-base lg:text-lg font-bold text-neutral-50 mb-4">Leaderboard</h3>
                 <div class="glass-panel rounded-xl overflow-hidden">
-                    <table class="w-full text-sm text-left">
-                        <thead class="text-xs text-neutral-500 uppercase bg-neutral-900">
-                            <tr>
-                                <th class="px-6 py-3">Rank</th>
-                                <th class="px-6 py-3">Candidate</th>
-                                <th class="px-6 py-3">Score</th>
-                                <th class="px-6 py-3">Skills</th>
-                                <th class="px-6 py-3">Impact</th>
-                            </tr>
-                        </thead>
-                        <tbody id="leaderboardBody" class="divide-y divide-white/5"></tbody>
-                    </table>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left">
+                            <thead class="text-xs text-neutral-500 uppercase bg-neutral-900">
+                                <tr>
+                                    <th class="px-3 lg:px-6 py-2 lg:py-3">Rank</th>
+                                    <th class="px-3 lg:px-6 py-2 lg:py-3">Candidate</th>
+                                    <th class="px-3 lg:px-6 py-2 lg:py-3">Score</th>
+                                    <th class="px-3 lg:px-6 py-2 lg:py-3 hidden md:table-cell">Skills</th>
+                                    <th class="px-3 lg:px-6 py-2 lg:py-3 hidden lg:table-cell">Impact</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboardBody" class="divide-y divide-white/5"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -487,11 +554,18 @@
                 const tr = document.createElement('tr');
                 tr.className = "bg-slate-800/20 border-b border-white/5 hover:bg-white/5";
                 tr.innerHTML = `
-                    <td class="px-6 py-4 font-bold text-neutral-50">#${index + 1}</td>
-                    <td class="px-6 py-4 text-neutral-300"><i class="fa-regular fa-file-pdf mr-2 text-red-400"></i>${file.name}</td>
-                    <td class="px-6 py-4"><span class="px-2 py-1 rounded bg-brand-500/20 text-brand-400 font-bold text-xs">${score}%</span></td>
-                    <td class="px-6 py-4 text-neutral-400">${Math.floor(score/10)} Matches</td>
-                    <td class="px-6 py-4 text-neutral-400">High Impact</td>
+                    <td class="px-3 lg:px-6 py-2 lg:py-4 font-bold text-neutral-50 text-sm lg:text-base">#${index + 1}</td>
+                    <td class="px-3 lg:px-6 py-2 lg:py-4 text-neutral-300 text-sm lg:text-base">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-regular fa-file-pdf text-red-400 text-sm lg:text-base"></i>
+                            <span class="truncate max-w-[120px] lg:max-w-none">${file.name}</span>
+                        </div>
+                    </td>
+                    <td class="px-3 lg:px-6 py-2 lg:py-4">
+                        <span class="px-2 py-1 rounded bg-brand-500/20 text-brand-400 font-bold text-xs lg:text-sm">${score}%</span>
+                    </td>
+                    <td class="px-3 lg:px-6 py-2 lg:py-4 text-neutral-400 text-sm lg:text-base hidden md:table-cell">${Math.floor(score/10)} Matches</td>
+                    <td class="px-3 lg:px-6 py-2 lg:py-4 text-neutral-400 text-sm lg:text-base hidden lg:table-cell">High Impact</td>
                 `;
                 tbody.appendChild(tr);
             });
